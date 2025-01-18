@@ -1,0 +1,31 @@
+---
+apiVersion: argoproj.io/v1alpha1
+# 커스텀 리소스
+kind: Application
+metadata:
+  # 어플리케이션 앱
+  name: foo-app
+  # argocd가 배포된 네임스페이스 이름
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/honeysexycombo/argocd-tutorial-pub
+    targetRevision: HEAD
+    # 실제 어플리케이션 매니페스트의 경로
+    path: env/stage/foo-app
+  destination:
+    server: https://kubernetes.default.svc
+  syncPolicy:
+    # 해당 설정을 통해 수동 싱크에서 자동 싱크로 설정된다.
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: false
+    syncOptions:
+      - Validate=true
+      - CreateNamespace=false
+      - PrunePropagationPolicy=foreground
+      - PruneLast=true

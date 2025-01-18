@@ -1,4 +1,4 @@
 apiVersion: v1
 kind: Namespace # 대소문자 주의
 metadata:
-  name: prod
+  name: foo
